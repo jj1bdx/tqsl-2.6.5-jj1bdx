@@ -366,6 +366,11 @@ check_loc(tQSL_Location loc, bool unclean = true) {
 
 static int
 tqsl_load_xml_config() {
+	if (tqsl_init()) {
+		tqslTrace("tqsl_load_xml_config", "tqsl_init");
+		tQSL_Error = TQSL_CONFIG_ERROR;
+	}
+
 	if (tqsl_xml_config.getElementList().size() > 0)	// Already init'd
 		return 0;
 	XMLElement default_config;
