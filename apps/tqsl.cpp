@@ -5352,8 +5352,19 @@ QSLApp::OnInit() {
 	long lng = -1;
 
         wxConfig *config = reinterpret_cast<wxConfig *>(wxConfig::Get());
+
+	// For forcefully opening the debug log here:
+	// tqsl_openDiagFile("./trace-oninit.log.txt");
+        // tqslTrace("QSLApp::OnInit()", "open logfile");
+
+	// This is needed to ensure actions of other tqsllib code
+	if (tqsl_init()) { // Init tqsllib
+		wxLogError(getLocalizedErrorString());
+	}
+
 #ifdef _WIN32
 	bool disa;
+
 	config->Read(wxT("DisableAdminCheck"), &disa, false);
 	if (!disa && IsElevated(NULL) == S_OK) {
 		TOKEN_ELEVATION_TYPE tet = TokenElevationTypeDefault;
